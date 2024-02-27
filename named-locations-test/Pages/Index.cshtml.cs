@@ -16,13 +16,15 @@ namespace named_locations_test.Pages
         {
             _logger = logger;
             _graphServiceClient = graphServiceClient;;
+            Locations = [];
         }
+
+        public List<NamedLocation> Locations { get; private set; }
 
         public async Task OnGet()
         {
-            var user = await _graphServiceClient.Me.Request().GetAsync();;
-            ViewData["GraphApiResult"] = user.DisplayName;;
-
+            IConditionalAccessRootNamedLocationsCollectionPage result = await _graphServiceClient.Identity.ConditionalAccess.NamedLocations.Request().GetAsync();
+            Locations = result.ToList();
         }
     }
 }
