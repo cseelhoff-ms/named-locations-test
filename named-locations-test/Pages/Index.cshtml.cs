@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Web;
 using System.Net;
 using Microsoft.Graph;
+using Azure.Identity;
 
 namespace named_locations_test.Pages
 {
@@ -11,12 +12,17 @@ namespace named_locations_test.Pages
     {
         private readonly GraphServiceClient _graphServiceClient;
         private readonly ILogger<IndexModel> _logger;
+        private readonly ManagedIdentityCredential _credential;
 
         public IndexModel(ILogger<IndexModel> logger, GraphServiceClient graphServiceClient)
         {
             _logger = logger;
             _graphServiceClient = graphServiceClient;;
             Locations = [];
+            
+            string[] graph_scope = new[] { "https://graph.microsoft.com/.default" };            
+            _credential = new ManagedIdentityCredential();
+            _graphServiceClient = new GraphServiceClient(_credential, graph_scope);
         }
 
         public List<NamedLocation> Locations { get; private set; }
