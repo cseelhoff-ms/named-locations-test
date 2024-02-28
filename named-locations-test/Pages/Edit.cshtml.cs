@@ -12,6 +12,8 @@ namespace named_locations_test.Pages
     {
         private readonly GraphServiceClient _graphServiceClient;
         private readonly ILogger<IndexModel> _logger;
+        
+        private readonly ManagedIdentityCredential _credential;
 
         [BindProperty]
         public IpNamedLocation Location { get; set; }
@@ -19,9 +21,9 @@ namespace named_locations_test.Pages
         public EditModel(ILogger<IndexModel> logger, GraphServiceClient graphServiceClient)
         {
             _logger = logger;
-            _graphServiceClient = graphServiceClient;
-            //string[] graph_scope = new[] { "https://graph.microsoft.com/.default" };
-            //_graphServiceClient = new GraphServiceClient(new ManagedIdentityCredential(), graph_scope);
+            string[] graph_scope = new[] { "https://graph.microsoft.com/.default" };            
+            _credential = new ManagedIdentityCredential();
+            _graphServiceClient = new GraphServiceClient(_credential, graph_scope);
             Location = new IpNamedLocation();
         }
 
